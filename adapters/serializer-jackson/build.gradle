@@ -1,0 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'io.openweathermap.sdk.adapters.serializer.jackson'
+version = '1.0.0'
+
+dependencies {
+}
+

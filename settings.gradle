@@ -1,0 +1,9 @@
+rootProject.name = 'openweathermap-sdk'
+include 'core'
+include 'adapters'
+include 'adapters:http-jdk'
+include 'adapters:http-okhttp'
+include 'adapters:serializer-jackson'
+include 'openweathermap-spring-boot-starter'
+include 'util'
+

@@ -1,0 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'io.openweathermap.sdk.adapters.http.jdk'
+version = '1.0.0'
+
+dependencies {
+}
