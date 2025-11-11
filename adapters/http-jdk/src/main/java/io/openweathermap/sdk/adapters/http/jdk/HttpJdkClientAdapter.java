@@ -10,15 +10,15 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class HttpJdkClient implements HttpClientPort {
+public class HttpJdkClientAdapter implements HttpClientPort {
 
     private final HttpClient client;
 
-    public HttpJdkClient() {
+    public HttpJdkClientAdapter() {
         this(HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build());
     }
 
-    public HttpJdkClient(HttpClient client) {
+    public HttpJdkClientAdapter(HttpClient client) {
         this.client = Objects.requireNonNull(client);
     }
 

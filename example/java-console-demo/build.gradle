@@ -9,5 +9,6 @@ dependencies {
     implementation project(":core")
     implementation project(":adapters:cache-guava")
     implementation project(":adapters:http-jdk")
+    implementation project(":adapters:http-okhttp")
     implementation project(":adapters:serializer-jackson")
 }

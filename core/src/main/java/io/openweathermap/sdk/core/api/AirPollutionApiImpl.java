@@ -1,6 +1,7 @@
 package io.openweathermap.sdk.core.api;
 
 import io.openweathermap.sdk.core.client.OwmEndpointHelper;
+import io.openweathermap.sdk.core.client.OwmRequestMeta;
 import io.openweathermap.sdk.core.http.HttpRequest;
 import io.openweathermap.sdk.core.model.CoordinatesRequest;
 import io.openweathermap.sdk.core.model.air.AirPollution;
@@ -14,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class AirPollutionApiImpl implements AirPollutionApi {
 
     private static final String PATH = "/data/2.5/air_pollution";
-    private static final long TTL_MS = 45 * 1000L;
+    private static final long REQUEST_TTL_MS = 45 * 1000L;
 
     private final OwmEndpointHelper h;
 
@@ -28,7 +29,13 @@ public class AirPollutionApiImpl implements AirPollutionApi {
         HttpRequest req = h.buildGet(uri);
         String key = OwmEndpointHelper.key(PATH, qb);
 
-        return h.getWithCacheAsync(req, key, TTL_MS)
-                .thenCompose(bytes -> h.decodeAsync(bytes, AirPollution.class));
+        OwmRequestMeta meta = OwmRequestMeta.builder()
+                .endpointId(PATH)
+                .cacheKey(key)
+                .ttlMillis(REQUEST_TTL_MS)
+                .build();
+
+        return h.executeAsync(req, meta)
+                .thenCompose(bytes -> h.decodeAsync(bytes.getBody(), AirPollution.class));
     }
 }

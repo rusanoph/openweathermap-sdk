@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-public class OkHttpClientPort implements HttpClientPort {
+public class OkHttpClientAdapter implements HttpClientPort {
 
     private static final MediaType OCTET_STREAM = MediaType.parse("application/octet-stream");
     private static final RequestBody EMPTY_BODY  = RequestBody.create(new byte[0], OCTET_STREAM);
@@ -21,11 +21,11 @@ public class OkHttpClientPort implements HttpClientPort {
 
     private final OkHttpClient client;
 
-    public OkHttpClientPort() {
+    public OkHttpClientAdapter() {
         this(new OkHttpClient());
     }
 
-    public OkHttpClientPort(OkHttpClient client) {
+    public OkHttpClientAdapter(OkHttpClient client) {
         this.client = Objects.requireNonNull(client);
     }
 

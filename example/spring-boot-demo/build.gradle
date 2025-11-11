@@ -5,15 +5,8 @@ plugins {
 group = 'io.openweathermap.sdk.example.springframework.boot'
 version = '1.0.0'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    implementation project(':openweathermap-spring-boot-starter')
 
-test {
-    useJUnitPlatform()
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.5.7'
 }

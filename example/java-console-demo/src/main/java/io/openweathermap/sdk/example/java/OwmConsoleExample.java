@@ -1,14 +1,15 @@
 package io.openweathermap.sdk.example.java;
 
 import io.openweathermap.sdk.adapters.cache.guava.GuavaCacheAdapter;
-import io.openweathermap.sdk.adapters.http.jdk.HttpJdkClient;
-import io.openweathermap.sdk.adapters.serializer.jackson.JacksonSerializer;
+import io.openweathermap.sdk.adapters.http.jdk.HttpJdkClientAdapter;
+import io.openweathermap.sdk.adapters.serializer.jackson.JacksonSerializerAdapter;
 import io.openweathermap.sdk.core.cache.CachePort;
 import io.openweathermap.sdk.core.client.OwmClient;
 import io.openweathermap.sdk.core.client.OwmClientConfig;
 import io.openweathermap.sdk.core.client.OwmEndpointHelper;
 import io.openweathermap.sdk.core.client.OwmRuntime;
 import io.openweathermap.sdk.core.http.HttpClientPort;
+import io.openweathermap.sdk.core.interceptor.OwmHttpPipeline;
 import io.openweathermap.sdk.core.model.CoordinatesRequest;
 import io.openweathermap.sdk.core.model.air.AirPollution;
 import io.openweathermap.sdk.core.model.forecast.Forecast5d;
@@ -26,22 +27,23 @@ public class OwmConsoleExample {
     public static void main(String[] args) {
         String apiKey = System.getenv(OPENWEATHERMAP_API_KEY_ENV);
 
-        HttpClientPort http = new HttpJdkClient();
-        SerializerPort serializer = new JacksonSerializer();
+        HttpClientPort http = new HttpJdkClientAdapter();
+        SerializerPort serializer = new JacksonSerializerAdapter();
         CachePort<String, byte[]> cache = new GuavaCacheAdapter(CACHE_SIZE);
 
         var owmConfig = OwmClientConfig.builder()
                 .apiKey(apiKey)
                 .build();
 
-        var owmRuntime = new OwmRuntime(owmConfig, http, serializer, cache);
-        var owmEndpointHelper = new OwmEndpointHelper(owmRuntime);
-        var owmClient = new OwmClient(owmRuntime, owmEndpointHelper);
+        var runtime = new OwmRuntime(owmConfig, http, serializer, cache);
+        var pipeline = new OwmHttpPipeline(runtime);  // By default: logging + headers + cache + retry
+        var helper = new OwmEndpointHelper(runtime, pipeline);
+        var owm = new OwmClient(runtime, helper);
 
-        // Retrieve coordinates by query string
-        List<GeoCity> geoCities = owmClient.getGeoApi().direct("Saint-Petersburg", 10);
+        // 1) Geocoding
+        List<GeoCity> geoCities = owm.getGeoApi().direct("Saint-Petersburg", 10);
 
-        // Extract place coordinates
+        // 2) Coordinates
         double lat = geoCities.getFirst().lat();
         double lon = geoCities.getFirst().lon();
 
@@ -50,9 +52,13 @@ public class OwmConsoleExample {
                 .lon(lon)
                 .build();
 
-        // Example of usages: weather, forecast, air pollution
-        Weather weather = owmClient.getWeatherApi().byCoords(request);
-        Forecast5d forecast5d = owmClient.getForecastApi().byCoords(request);
-        AirPollution airPollution = owmClient.getAirPollutionApi().now(request);
+        // 3) Weather, forecast, air quality
+        Weather weather = owm.getWeatherApi().byCoords(request);
+        Forecast5d forecast5d = owm.getForecastApi().byCoords(request);
+        AirPollution airPollution = owm.getAirPollutionApi().now(request);
+
+        System.out.println(weather);
+        System.out.println(forecast5d);
+        System.out.println(airPollution);
     }
 }

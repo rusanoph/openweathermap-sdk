@@ -26,6 +26,25 @@ subprojects {
             withSourcesJar()
         }
 
+        jar {
+            manifest {
+                attributes(
+                        'Implementation-Title': project.name,
+                        'Implementation-Version': project.version
+                )
+            }
+        }
+
+        tasks.withType(Jar).configureEach {
+            def isExample = project.path.startsWith(':examples:') || project.path.startsWith(':example:')
+
+            if (isExample) {
+                from("$rootDir/example/LICENSE") { into "META-INF"; rename { "LICENSE.txt" } }
+            } else {
+                from("$rootDir/LICENSE") { into "META-INF"; rename { "LICENSE.txt" } }
+            }
+        }
+
         test {
             useJUnitPlatform()
         }

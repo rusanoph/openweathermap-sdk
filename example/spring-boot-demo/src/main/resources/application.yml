@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    banner-mode: off
+
+owm:
+  api-key: ${OPENWEATHERMAP_API_KEY}
+  connect-timeout: 5s
+  read-timeout: 10s
+  retry-attempts: 3
+  retry-base-delay: 200ms
+  retry-max-delay: 2s
+  cache-size-mb: 128
+

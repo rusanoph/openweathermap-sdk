@@ -6,5 +6,13 @@ group = 'io.openweathermap.sdk.springframework.boot'
 version = '1.0.0'
 
 dependencies {
+    api project(":core")
+    api project(":adapters:cache-guava")
+    api project(":adapters:http-jdk")
+    api project(":adapters:http-okhttp")
+    api project(":adapters:serializer-jackson")
+
+    api 'org.springframework.boot:spring-boot-starter:3.5.7'
+//    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 }
 

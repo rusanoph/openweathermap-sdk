@@ -1,6 +1,7 @@
 package io.openweathermap.sdk.core.api;
 
 import io.openweathermap.sdk.core.client.OwmEndpointHelper;
+import io.openweathermap.sdk.core.client.OwmRequestMeta;
 import io.openweathermap.sdk.core.http.HttpRequest;
 import io.openweathermap.sdk.core.model.CoordinatesRequest;
 import io.openweathermap.sdk.core.model.forecast.Forecast5d;
@@ -20,18 +21,24 @@ public class ForecastApiImpl implements ForecastApi {
 
     @Override
     public CompletableFuture<Forecast5d> byCoordsAsync(CoordinatesRequest request) {
-        QueryBuilder qb = h.defaultsWithFallback(
-                request.getLat(),
-                request.getLon(),
-                request.getUnits(),
-                request.getLanguage()
-        );
+        QueryBuilder qb = new QueryBuilder()
+                .add("lat", request.getLat())
+                .add("lon", request.getLon())
+                .add("units", request.getUnits())
+                .add("lang", request.getLanguage());
+
 
         URI uri = h.uri(PATH, qb);
         HttpRequest req = h.buildGet(uri);
         String key = OwmEndpointHelper.key(PATH, qb);
 
-        return h.getWithCacheAsync(req, key, REQUEST_TTL_MS)
-                .thenCompose(bytes -> h.decodeAsync(bytes, Forecast5d.class));
+        OwmRequestMeta meta = OwmRequestMeta.builder()
+                .endpointId(PATH)
+                .cacheKey(key)
+                .ttlMillis(REQUEST_TTL_MS)
+                .build();
+
+        return h.executeAsync(req, meta)
+                .thenCompose(bytes -> h.decodeAsync(bytes.getBody(), Forecast5d.class));
     }
 }

@@ -1,6 +1,7 @@
 package io.openweathermap.sdk.core.api;
 
 import io.openweathermap.sdk.core.client.OwmEndpointHelper;
+import io.openweathermap.sdk.core.client.OwmRequestMeta;
 import io.openweathermap.sdk.core.http.HttpRequest;
 import io.openweathermap.sdk.core.model.geo.GeoCity;
 import io.openweathermap.sdk.util.http.QueryBuilder;
@@ -28,8 +29,14 @@ public class GeoApiImpl implements GeoApi {
         HttpRequest req = h.buildGet(uri);
         String key = OwmEndpointHelper.key(PATH, qb);
 
-        return h.getWithCacheAsync(req, key, REQUEST_TTL_MS)
-                .thenCompose(bytes -> h.decodeAsync(bytes, GeoCity[].class))
+        OwmRequestMeta meta = OwmRequestMeta.builder()
+                .endpointId(PATH)
+                .cacheKey(key)
+                .ttlMillis(REQUEST_TTL_MS)
+                .build();
+
+        return h.executeAsync(req, meta)
+                .thenCompose(bytes -> h.decodeAsync(bytes.getBody(), GeoCity[].class))
                 .thenApply(List::of);
     }
 }

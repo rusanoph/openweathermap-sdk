@@ -7,11 +7,11 @@ import tools.jackson.databind.PropertyNamingStrategies;
 import tools.jackson.databind.json.JsonMapper;
 
 @RequiredArgsConstructor
-public class JacksonSerializer implements SerializerPort {
+public class JacksonSerializerAdapter implements SerializerPort {
 
     private final ObjectMapper objectMapper;
 
-    public JacksonSerializer() {
+    public JacksonSerializerAdapter() {
         this(JsonMapper.builder()
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .build());
