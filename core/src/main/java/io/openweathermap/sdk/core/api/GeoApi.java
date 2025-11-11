@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 public interface GeoApi {
     CompletableFuture<List<GeoCity>> directAsync(String q, int limit);
 
-    default List<GeoCity> direct(String q, int limit) throws Exception {
+    default List<GeoCity> direct(String q, int limit) {
         return directAsync(q, limit).join();
-    };
+    }
 }

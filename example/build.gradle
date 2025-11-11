@@ -1,0 +1,16 @@
+def exampleGroup   = 'io.openweathermap.sdk.example'
+def exampleVersion = '1.0.0'
+
+group   = exampleGroup
+version = exampleVersion
+
+subprojects {
+    group   = exampleGroup
+    version = exampleVersion
+
+    pluginManager.withPlugin('java') {
+        dependencies {
+//            implementation project(':core')
+        }
+    }
+}

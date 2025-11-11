@@ -1,29 +1,31 @@
 package io.openweathermap.sdk.core.client;
 
-import io.openweathermap.sdk.core.model.OwmLanguage;
-import io.openweathermap.sdk.core.model.OwmUnits;
 import io.openweathermap.sdk.core.cache.AsyncCache;
 import io.openweathermap.sdk.core.cache.CacheEntry;
 import io.openweathermap.sdk.core.exception.HttpStatusException;
 import io.openweathermap.sdk.core.http.HttpRequest;
+import io.openweathermap.sdk.core.model.OwmLanguage;
+import io.openweathermap.sdk.core.model.OwmUnits;
 import io.openweathermap.sdk.util.http.QueryBuilder;
 import io.openweathermap.sdk.util.retry.Retry;
 
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
-public final class EndpointHelper {
+public final class OwmEndpointHelper {
 
     private final OwmRuntime runtime;
+//    private final OwmHttpPipeline pipeline;
+
     private final AsyncCache<String, byte[]> cache;
 
-    public EndpointHelper(OwmRuntime runtime) {
+    public OwmEndpointHelper(OwmRuntime runtime) {
         this.runtime = runtime;
         this.cache = new AsyncCache<>(runtime.getCache(), runtime.getConfig().getHttpExecutor());
     }
 
     public URI uri(String path, QueryBuilder qb) {
-        String base = "https://" + runtime.getConfig().getHost() + path;
+        String base = runtime.getConfig().getHost() + path;
         String query = qb.add("appid", runtime.getConfig().getApiKey()).build();
         return URI.create(base + "?" + query);
     }
@@ -54,7 +56,7 @@ public final class EndpointHelper {
                     runtime.getConfig().getRetryBaseDelay(),
                     runtime.getConfig().getRetryMaxDelay(),
                     runtime.getConfig().getRetryJitter(),
-                    EndpointHelper::isRetryable
+                    OwmEndpointHelper::isRetryable
             );
 
             return Retry.withRetryAsync(

@@ -47,13 +47,29 @@ public class OwmClientConfig {
     private ScheduledExecutorService scheduler; // for retry, timeouts
 
     public OwmClientConfig(
-            String host, String apiKey,
-            int retryAttempts, Duration retryBaseDelay, Duration retryMaxDelay, double retryJitter,
-            Duration connectTimeout, Duration readTimeout,
-            Executor httpExecutor, Executor decoderExecutor, ScheduledExecutorService scheduler
+            String apiKey,
+            String host,
+
+            OwmUnits defaultUnits,
+            OwmLanguage defaultLanguage,
+
+            int retryAttempts,
+            Duration retryBaseDelay,
+            Duration retryMaxDelay,
+            double retryJitter,
+
+            Duration connectTimeout,
+            Duration readTimeout,
+
+            Executor httpExecutor,
+            Executor decoderExecutor,
+            ScheduledExecutorService scheduler
     ) {
         this.apiKey = Objects.requireNonNull(apiKey);
         this.host = Objects.requireNonNull(host);
+
+        this.defaultUnits = Objects.requireNonNull(defaultUnits);
+        this.defaultLanguage = Objects.requireNonNull(defaultLanguage);
 
         this.retryAttempts = Math.max(1, retryAttempts);
         this.retryBaseDelay = Objects.requireNonNull(retryBaseDelay);

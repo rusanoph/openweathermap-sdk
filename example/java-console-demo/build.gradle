@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+}
+
+group = 'io.openweathermap.sdk.example.java'
+version = '1.0.0'
+
+dependencies {
+    implementation project(":core")
+    implementation project(":adapters:cache-guava")
+    implementation project(":adapters:http-jdk")
+    implementation project(":adapters:serializer-jackson")
+}

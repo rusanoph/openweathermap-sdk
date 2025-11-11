@@ -1,8 +1,7 @@
-group = 'io.openweathermap.sdk.core'
+group = 'io.openweathermap.sdk'
 version = findProperty('version') ?: '1.0-SNAPSHOT'
 
 allprojects {
-
     repositories {
         mavenCentral()
     }
@@ -11,7 +10,6 @@ allprojects {
 subprojects {
     pluginManager.withPlugin('java') {
         dependencies {
-            implementation project(':util')
             compileOnly 'org.projectlombok:lombok:1.18.34'
             annotationProcessor 'org.projectlombok:lombok:1.18.34'
             testCompileOnly 'org.projectlombok:lombok:1.18.34'
@@ -30,6 +28,14 @@ subprojects {
 
         test {
             useJUnitPlatform()
+        }
+    }
+}
+
+configure(subprojects - project(':util')) {
+    pluginManager.withPlugin('java') {
+        dependencies {
+            implementation project(':util')
         }
     }
 }

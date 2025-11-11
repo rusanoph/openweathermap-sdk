@@ -1,7 +1,5 @@
 package io.openweathermap.sdk.core.model.air;
 
-import lombok.Value;
-
 import java.util.List;
 
 public record AirPollution(List<Item> list) {

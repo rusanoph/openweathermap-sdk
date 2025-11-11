@@ -10,9 +10,12 @@ public record Forecast5d(
             String name,
             String country,
             Integer timezone,
-            Double lat,
-            Double lon
+            Coordinates coord
     ) {
+        public record Coordinates(
+                Double lat,
+                Double lon
+        ) {}
     }
 
     public record Item(
