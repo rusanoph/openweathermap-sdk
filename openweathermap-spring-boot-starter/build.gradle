@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-group = 'io.openweathermap.sdk.springframework.boot'
-version = '1.0.0'
-
 dependencies {
     api project(":core")
     api project(":adapters:cache-guava")

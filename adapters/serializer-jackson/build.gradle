@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-group = 'io.openweathermap.sdk.adapters.serializer.jackson'
-version = '1.0.0'
-
 dependencies {
     implementation 'tools.jackson.core:jackson-core:3.0.2'
     implementation 'tools.jackson.core:jackson-databind:3.0.2'

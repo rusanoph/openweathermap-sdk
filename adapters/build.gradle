@@ -1,13 +1,4 @@
-def adaptersGroup   = 'io.openweathermap.sdk.adapters'
-def adaptersVersion = '1.0.0'
-
-group   = adaptersGroup
-version = adaptersVersion
-
 subprojects {
-    group   = adaptersGroup
-    version = adaptersVersion
-
     pluginManager.withPlugin('java') {
         dependencies {
             implementation project(':core')

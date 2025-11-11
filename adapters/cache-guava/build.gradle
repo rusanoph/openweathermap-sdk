@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-group = 'io.openweathermap.sdk.adapters.cache.guava'
-version = '1.0.0'
-
 dependencies {
     implementation 'com.google.guava:guava:33.5.0-jre'
 }
